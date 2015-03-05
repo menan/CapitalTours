@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<phonegap>
-    <access origin="http://127.0.0.1*"/>
-    <access origin="https://maps.googleapis.com*"/>
-    <access origin="http://hq.autoboxmedia.com*"/>
-	<access origin="http://ncc.autoboxdev.com*"/>
-	<access origin="*"/>
-    <log level="DEBUG"/>
-</phonegap>
