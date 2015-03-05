@@ -1,0 +1,16 @@
+11:34:46,760 TRACE [R] ContextManager starting, bundle version: 1.5.0.201112201607
+11:34:47,022 DEBUG [C] Property change listener is enabled.
+11:34:47,420 TRACE [C] LC_filtering_set was changed from "false" to "true"
+11:34:47,434 TRACE [R] ContextManager startingneed update: true
+11:34:47,446 DEBUG [T] Starting Search for CPs
+11:34:47,582 DEBUG [T] CP named BlackBerry Java SDK version 7.0.0 was found at /Users/mrnegitoro/Desktop/BBEclipse/plugins/net.rim.ejde.componentpack7.0.0_7.0.0.33/components
+11:34:48,076 DEBUG [B] qualifier: 201112201607
+11:34:49,674 DEBUG [K] VM: *SWITCH* from [NULL] to [Contents$JVM Contents (MacOS X Default)]
+11:34:49,700 DEBUG [K] VM: *ADDED* [Contents$/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home]
+11:34:49,770 TRACE [V] Attempting to create VM with name - BlackBerry JRE 7.0.0
+11:34:49,813 DEBUG [K] VM: *ADDED* [BlackBerry JRE 7.0.0$/Users/mrnegitoro/Desktop/BBEclipse/plugins/net.rim.ejde.componentpack7.0.0_7.0.0.33/components]
+11:34:49,896 TRACE [C] openStartupOnEclpseFirstStart was changed from "false" to "false"
+11:34:49,903 DEBUG [I] Bundle [net.rim.ejde] is changing state to Started.
+11:36:05,132 DEBUG [B] qualifier: 19
+11:38:03,525 DEBUG [I] Bundle [net.rim.ejde] is changing state to Stopping.
+11:38:03,526 DEBUG [C] Property change listener is disabled.

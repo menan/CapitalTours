@@ -1,0 +1,714 @@
+@import 'constants';
+@import 'type';
+@import 'ui';
+
+.ui-page {
+	padding-top: $header-height;
+	padding-bottom: $footer-height;
+}
+
+/*	hide header and footer during transition
+.ui-mobile-viewport-transitioning .ui-header-fixed,
+.ui-mobile-viewport-transitioning .ui-footer-fixed { visibility: hidden; }*/
+
+@mixin big-btn-up {
+	border: 1px solid 		#ccc /*{c-bup-border}*/;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#daedee), color-stop(13%,#daedee), color-stop(50%,#eaf2f2), color-stop(88%,#cbdddd), color-stop(100%,#cbdddd));
+	
+	&:active, &.active {
+		background: -webkit-gradient(linear, left bottom, left top, color-stop(0%,#daedee), color-stop(13%,#daedee), color-stop(50%,#eaf2f2), color-stop(88%,#cbdddd), color-stop(100%,#cbdddd));
+		box-shadow: inset 0 -1px 5px rgba(0,0,0,0.13);
+	}
+}
+
+.ui-page, .ui-mobile, .ui-mobile-viewport {
+  /*-webkit-backface-visibility: hidden;  prevent jQuery Mobile page flicker (partial fix) */
+}
+
+.ui-body-c {
+	border: none;
+}
+
+/*.ui-mobile-touch-overflow.ui-native-fixed .ui-content {
+	padding-top: 3.5em;
+}*/
+
+.gallery { list-style: none; padding: 0; margin: 0; 
+	:after { clear: both; content: "."; display: block; height: 0; visibility: hidden; }
+	 li { float: left; width: 33.33333333%; }
+	 li a { display: block; margin: 5px; border: 1px solid #3c3c3c; }
+	 li img { display: block; width: 100%; height: auto; }
+}
+
+.ps-caption-content {
+	text-shadow: none;
+}
+
+.definition {
+  display: none;
+}
+
+[data-role=dialog]#definition .ui-title {
+  /*text-transform: capitalize;*/
+}
+
+
+.waypoint-body {
+	.inner {
+		height: 300px;
+		overflow: hidden;
+	}
+	
+	&.show .inner {
+		height: auto;
+		min-height: 300px;
+	}
+	
+	#body-toggle {
+		display: block;
+		margin: 0 0 1em;
+		background: url('images/ui.png') no-repeat -261px -211px;
+		width: 31px;
+		height: 31px;
+		
+		strong {
+			visibility: hidden;
+		}
+	}
+	
+	&.show #body-toggle {
+		display: none;
+	}
+	
+	 &.keep #body-toggle {
+	 	visibility: hidden;
+	 }
+	
+	.body-footer {
+		position: relative;
+		z-index: 10;
+		height: 37px;
+		margin-top: -35px;
+		background:  url('images/content-fade.png') left -88px repeat-x;
+	}
+	
+	&.show .body-footer {
+		display: none;
+	}
+
+	h3 {
+		margin-bottom: -.5em;
+		font-size: 1.1em;
+	}
+	
+	a#next-waypoint {
+		margin-bottom: 3em;
+	}
+}
+
+/* @group landing */
+
+.tourset-landing-main-img {
+	@include big-btn-up;
+	@include no-data-inset;
+	margin-bottom: 15px;
+	
+	.set-img {
+		@include img-frame;
+	}
+	
+	img {
+		width: 100%;
+		height: auto;
+		margin: 0 0 -4px;
+		padding: 0;
+	}
+	
+	a {
+		text-decoration: none;
+		color: #000;
+	}
+	
+	h2 {
+		margin-bottom: 0;
+		font-size: $h2;
+		color: $header-link-color;
+	}
+	
+	p {
+		margin: 0;
+		width: 80%;
+		font-weight: normal;
+		font-size: $title-byline;
+		color: $txt-passive-color;
+	}
+}
+
+#terms {
+	margin-top: 100px;
+	text-align: center;
+	
+	a {
+		color: #54544b;
+		text-decoration: underline;
+		font-weight: normal;
+	}
+}
+
+/* @end */
+
+/* @group tour set home */
+
+.tour-set-img-leader {
+	position: relative;
+	width: 320px;
+	height: 205px;
+	margin: $img-no-inset;
+
+	.tour-set-leader {
+		position: absolute;
+		width: 100%;
+		bottom: 0;
+		background: rgba(0,0,0,.48);
+		padding: 10px 15px;
+		
+		.tour-set-title {
+			margin: 0;
+			font-size: $h1;
+			color: $header-color;
+			text-shadow: none;
+		}
+		
+		.tour-set-main-img-precis {
+			color: #fff;
+			text-shadow: none;
+			font-size: $title-byline;
+		}
+	}
+	
+	.tour-set-main-img img  {
+		width: 100%;
+	}
+}
+
+#tour-list {
+	margin-top: 5px;
+	position: relative;
+	top: -10px;
+}
+
+
+
+/* @end */
+
+/* @group tour home */
+
+.tour-map-leader {
+	position: relative;
+	margin: $img-no-inset;
+	overflow: hidden;
+	min-height: 209px;
+	background: url('images/wmark-map.png') center 90px no-repeat;
+	
+	.tour-leader {
+		position: absolute;
+		float: left;
+		z-index: 10;
+		width: 100%;
+		
+		background: rgba(239,239,239,.7);
+		box-shadow: 0 2px 0 rgba(0,0,0,0.1);
+		
+		.inner {
+			padding: 14px 15px 10px;
+		}
+		
+		.tour-title {
+			margin: 0;
+			font-size: $h1;
+			color: $header-link-color;
+		}
+		
+		.tour-body p {
+			margin: 0;
+			font-size: $title-byline;
+		}
+	}
+	
+	.tour-main-img {
+		position: relative;
+		z-index: 5;
+		
+		img {
+			width: 100%;
+			height: auto;
+		}
+	}
+}
+
+#tour #notifications {
+	margin: 0 -15px;
+	padding: 10px 21px;
+	position: relative;
+	background: #2c2c2b;
+	color: #fff;
+	text-shadow: none;
+	font-size: 0.87em;
+}
+
+#tour .tour-times {
+  margin-top: 10px;
+}
+
+#wp-list {
+	@include li-img-left;
+	margin-top: 5px;
+	position: relative;
+	top: -6px;
+}
+
+[data-role="listview"] li.warning {
+	background: #e9e9e9;
+	
+	h3.ui-li-heading {
+		color: #939393;
+		text-shadow: none;
+	}
+}
+/* @end */
+
+
+
+/* @group definition */
+
+#definition {
+	
+	.ui-header-fixed a {
+		display: none;
+	}
+	
+	.body {
+		word-wrap: break-word;
+	}
+	
+	.dialog-close {
+		float: right;
+		width: 100px;
+		box-shadow: none;
+		border: 0;
+	}
+
+}
+
+.ui-overlay-a {
+	background: #2c2c2b;
+}
+
+/* @end */
+
+/* @group waypoint */
+
+.waypoint-img-leader {
+	position: relative;
+	margin: $img-no-inset;
+	
+	.media-bar {
+		/*position: absolute;			this floats the bar on top of the content
+		float: left;
+		z-index: 10;*/
+	}
+	
+	.waypoint-main-img {
+		min-height: 209px;
+		background: url(images/wmark-img.png) center 90px no-repeat;
+		
+		img {
+			width: 100%;
+		}
+	}
+}
+
+.media-bar {
+	$media-bar-height: 53px;
+	
+	width: 100%;
+	height: $media-bar-height;
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(153,184,190,0.70)), color-stop(16%,rgba(214,234,236,0.70)), color-stop(86%,rgba(214,234,236,0.70)), color-stop(100%,rgba(153,184,190,0.70)));
+
+	
+	[data-role="controlgroup"] a {
+		display: inline-block;
+		vertical-align: middle;
+		height: $media-bar-height;
+		background: url('images/ui.png') no-repeat 10px -60px;
+		border: 1px solid rgba(3,55,72,.1);
+		border-radius: 0;
+		border-width: 0 1px 0 0;
+		
+		.ui-btn-inner {
+			text-overflow: clip;
+		}
+		
+		&:active, &:hover {
+			box-shadow: inset 0 0 2px rgba(0,0,0,0.23);
+			
+			.ui-btn-inner {
+				background: rgba(153,184,190,0.50);
+			}
+		}
+		
+		.ui-btn-inner {
+			padding: 1.2em 1.2em 1em;
+		}
+		
+		strong {
+			display: block;
+			max-width: 49px;
+			visibility: hidden;
+		}
+		
+		&#photo-galleryx {
+			max-width: 86px;
+		}
+		
+		&#wpvideo {
+			max-width: 76px;
+			background-position: -63px -60px;
+		}
+		
+		&#wpaudio {
+			max-width: 76px;
+			background-position: -118px -60px;
+		}
+		
+		&#wp-share {
+			float: right;
+			border: 0;
+			background-position: -190px -60px;
+		}
+		
+		&.ui-disabled {
+			display: none;
+		}
+	}
+	
+}
+.waypoint-body {
+
+	h3.waypoint-title {
+		@include content-title;
+	}
+
+	h3 {
+		font-size: $h2;
+	}
+	
+	.inner {
+		padding-bottom: 1em;
+	}
+	
+	.notice {
+		margin: 1em 0 0;
+		padding: 5px 0;
+		background: rgba(237,207,8,.25);
+		
+		p {
+			margin: 0;
+		}
+	}
+}
+
+/* @end */
+
+/* @group photos */
+
+#photo-gallery {
+	.ui-content {
+		margin-top: 1em;
+	}
+	
+	ul.gallery {
+		
+		margin-left: 13px;
+		
+		li {
+			width: 32%;
+		
+			a {
+				@include img-frame;
+				
+			}
+		}
+	}
+}
+
+/* @end */
+
+#video {
+	
+  .video-wp-title {
+  	display: none;
+  }
+
+ .video-list {
+	@include li-img-right-taller;
+	
+	.ui-icon-arrow-r {
+		@include media-arrow;
+	}
+	
+	}
+}
+
+#audio {
+	
+  .audio-wp-title {
+  	display: none;
+  }
+
+ .audio-list {
+	@include li-img-right;
+	
+	.ui-icon-arrow-r {
+		@include media-arrow;
+	}
+	
+	.playing .ui-icon-arrow-r {
+		@include media-arrow-pause;
+	}
+	
+	}
+}
+
+/* @group topics */
+
+.topic-filter-options {
+	margin: $img-no-inset;
+	margin-bottom: 0;
+	
+	ul li a {
+		border: none !important;
+	}
+	
+	ul li:first-child a {
+		background: -webkit-gradient(linear, right top,left top,  color-stop(0%,#e2eeee), color-stop(100%,#bfd2d6)); 
+		background: linear-gradient(ri, #d9ebed 0%,#e2eeee 100%);
+	}
+	
+	ul li:last-child a {
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%,#e2eeee), color-stop(100%,#bfd2d6)); 
+		background: linear-gradient(left, #e2eeee 0%,#bfd2d6 100%);
+	}
+	
+	ul li a .ui-btn-inner {
+		padding: 1.1em 0 .7em !important;
+		border: none;
+		
+		.ui-btn-text {
+			font-size: 19px;
+			color: $ui-alt-color;
+			text-shadow: none;
+		}
+	}
+	
+	ul li a.ui-btn-active {
+		border: none;
+		
+		.ui-btn-text {
+			
+		}
+	}
+}
+
+#topic-filter-items-data {
+	margin: $no-side-inset;
+	margin-top: -12px;
+	border-radius: 0;
+	border: 0;
+	
+	.ui-checkbox {
+		label {
+			background: #e0e0e0;
+			
+			&.ui-checkbox-on {
+				background: #fff;
+			
+				.ui-icon {
+					background-color: $header-link-color;
+				}
+			}
+		}
+		.ui-corner-bottom, .ui-corner-top {
+			border-radius: 0;
+			border: 0;
+		}
+	}
+}
+
+#topdetail {
+	.topic-detail-title {
+		@include alt-page-title;
+		
+	}
+
+	[data-role=listview] {
+		@include li-img-left;
+		
+		li.ui-li-has-thumb .ui-btn-inner {
+			background: none;
+		}
+	}
+}
+
+/* @end */
+
+/* @group me */
+
+#me {
+	[data-role=content] [data-role=listview] {
+		.current-tour, .favourites {
+			a.ui-link-inherit {
+				padding-left: 50px;
+				background: url('images/ui.png') no-repeat -448px -121px;
+			}
+		}
+		.favourites a.ui-link-inherit {
+			background-position: -448px -198px;
+		}
+	}
+}
+
+[data-role=listview].bookmarks {
+	@include li-img-left;
+	
+	li.ui-li-has-thumb .ui-btn-inner {
+		background: none;
+	}
+}
+
+.bookmarks-title {
+	@include alt-page-title;
+}
+
+/* @end */
+
+/* @group perspectives */
+
+ul#perspectives-list {
+	@include li-img-left;
+	
+	li.ui-li-has-thumb .ui-btn-inner {
+		background: none;
+	}
+}
+
+/* @end */
+
+/* @group map */
+
+.map-infobox {
+	width: 250px;
+	position: relative;
+	z-index: 9999;
+	padding: .5em ;
+	background: rgba(0,0,0,.7);
+	
+	a {
+		display: block;
+		position: relative;
+		z-index: 9999;
+	}
+	
+	.iw-image  {
+		display: inline-block;
+		vertical-align: middle;
+		
+		img {
+			width: 50px;
+			height: auto;
+		}
+	}
+	
+	.iw-title {
+		display: inline-block;
+		margin-left: 10px;
+		width: 180px;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+		text-shadow: none;
+		color: $ui-em-color;
+		font-size: 16px;
+	}
+	
+	.wp-info-notice {
+		position: absolute;
+		right: 3px;
+		top: -5px;
+		color: #edcf08;
+		text-shadow: none;
+		font-size: 2em;
+	}
+}
+
+#map_canvas {
+	.no-connection {
+		margin-top: 50%;
+		padding: 0 15px;
+		text-align: center;
+		color: $txt-passive-color;
+	}
+}
+
+
+/* @end */
+
+#static-pages {
+	h3.title {
+		@include alt-page-title;
+		margin-bottom: 1em;
+	}
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+
+	[data-role="controlgroup"] a ,
+	.waypoint-body #body-toggle,
+	#me [data-role=content] [data-role=listview] .current-tour a.ui-link-inherit,
+	#me [data-role=content] [data-role=listview] .favourites a.ui-link-inherit
+	{
+		background-image: url('images/ui-2x.png') !important;
+		background-size: 500px 500px !important;
+	}
+	
+	.tour-map-leader {
+		background: url('images/wmark-map-2x.png') center 100px no-repeat;
+		background-size: 46px 74px;
+	}
+	
+	.waypoint-main-img {
+		min-height: 209px;
+		background: url(images/wmark-img.png) center 90px no-repeat;
+		background-image: url(images/wmark-img-2x.png);
+		background-size: 65px 61px;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

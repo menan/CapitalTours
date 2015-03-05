@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html class="ui-mobile">
+	<head>
+		<title>CapitalTour</title> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta name="format-detection" content="telephone=no">    
+		<meta charset="utf-8">
+		
+		<!-- CSS -->
+		<link rel="stylesheet" href="lib/js/jquery.mobile.structure-1.1.0.min.css"/>
+		<link rel="stylesheet" href="lib/js/jquery.mobile.actionsheet.css"/>
+		<link rel="stylesheet" href="css/brule.css"/>
+		<link rel="stylesheet" href="css/photoswipe.css"/>
+		<link rel="stylesheet" href="css/app.css"/>
+		<link rel="stylesheet" href="css/pages.css"/>
+		<link rel="stylesheet" href="css/type.css"/>
+		<link rel="stylesheet" href="css/ui.css"/>
+		
+		<!-- phonegap script -->
+		<script type="text/javascript" charset="utf-8" src="phonegap-1.4.1.js"></script>
+		
+		<script type="text/javascript" src="childbrowser.js"></script>
+		<script type="text/javascript" src="FBConnect.js"></script>
+		<script type="text/javascript" src="lib/js/GoogleAnalyticsPlugin.js"></script>
+
+		<!--<script type="text/javascript" src="lib/js/TestFlight.js"></script>-->
+		<script type="text/javascript" src="lib/js/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="lib/js/lawnchair-0.6.1.min.js"></script>
+		<script type="text/javascript" src="lib/js/lawnchair-query-0.6.1.js"></script>
+		<script type="text/javascript" src="lib/js/jquery.mobile-1.1.0.min.js"></script>
+		<script type="text/javascript" src="lib/js/jquery.mobile.actionsheet.js"></script>
+		<script type="text/javascript" src="lib/js/klass.min.js"></script>
+		<script type="text/javascript" src="lib/js/code.photoswipe.jquery-3.0.4.min.js"></script>
+		<!-- <script type="text/javascript" src="http://hq.autoboxmedia.com:2122/target/target-script-min.js#jh"></script> -->
+		
+	    <script type="text/javascript">
+	    	var gtnid = null;
+			function loadScript(url, callback) {
+				// adding the script tag to the head as suggested before
+				var head = document.getElementsByTagName('head')[0];
+				var script = document.createElement('script');
+				script.type = 'text/javascript';
+				script.src = url;
+				
+				// then bind the event to the callback function 
+				// there are several events for cross browser compatibility
+				//script.onreadystatechange = callback(url);  // not working on OS5
+				script.onload = callback(url);  // not working on OS5
+			
+				// fire the loading
+				head.appendChild(script);
+			}
+			
+			function hardReset() {
+				localStorage.clear();
+				loc = window.location.href;
+				loc = loc.split('#')[0];
+				window.location.href = loc;
+			}			
+			
+			/*
+			function loadScripts() {					
+				var scripts = [];
+				
+				//scripts.push("http://hq.autoboxmedia.com:2122/target/target-script-min.js#vrooid");
+				
+				for(var i = 1; i <= scripts.length; i++) {
+					if(i == scripts.length) {
+						//console.log"JS scripts loaded, running main()");
+						main();
+						break;
+					}
+					loadScript(scripts[i], function(script) {
+						//console.log("Loading script: " + i + ": " + script);
+					});
+				}
+			}
+			*/
+			
+			$(document).ready(function() {
+				loadScript("app/resources.default.js", function(script) {
+					loadScript("app/scripts.js", function(script) {
+						loadScript("app/ui.js", function(script) {
+							loadScript("app/main.js", function(script) {
+								loadScript("app/os.js", function(script) { });
+								loadScript("app/geo.js", function(script) { 
+									loadScript("app/media.js", function(script) {
+										loadScript("app/app.js", function(script) { 
+											//loadScripts();
+											main();
+										});
+									});
+								});
+							});
+						});
+					});
+				});
+			});
+			
+			function main() {
+				$(document).ready(function() {			
+					// ------------------
+					// Bind Events Here
+					// ------------------
+					
+					// inital language chooser
+					$("#language-choice").on("tap", function(e){
+						var language = $(e.target).closest("A").attr('data-language');
+						$("#language-choice").hide();
+						$("#tour-sets .throbber").css('display', 'block')
+						playTutorial(language);
+						cacheData(language, function(){
+							showTourSets();
+							return false;
+						});
+					});
+					
+					// settings language chooser
+					$('input[name="lang-select"]').change(function(){
+						$.mobile.showPageLoadingMsg();
+						if ($('#lang-select-fr')[0].checked) {
+							//$.extend(Brule.resources, Brule.frStrings);
+							//applyLang();
+							cacheData("French", function(){
+								$.mobile.changePage("#");
+								showTourSets();
+								trackEvent('switch', 'language', 'fr');
+							});
+						} 
+						else {
+							//$.extend(Brule.resources, Brule.enStrings);
+							//applyLang();
+							cacheData("English", function(){
+								$.mobile.changePage("#");
+								showTourSets();
+								trackEvent('switch', 'language', 'en');
+							});
+						}
+					});
+					
+					// home page handlers
+					$("#tourset-list").on('tap', function(e){
+						var tsid = $(e.target).closest("A").attr('data-tourset-id');
+						//currentTourSet.set(tsid)
+						if(typeof tsid !== 'undefined') {
+							initTours(tsid.toString());
+							$(this).parent().addClass('active');
+						}
+						//if (isConnected()) initAnalytics();
+					});
+					
+					// #tour-home
+					$("#tour-list").on('tap',function(e) {
+						var wid = $(e.target).closest('A').attr('data-waypoint-id');
+						if (wid !== undefined) {
+							initWaypoints(wid.toString());
+						}
+						else {
+							initWaypoints(gtnid);
+						}
+					});
+					
+					// #tour - waypoints list
+					$("#wp-list").on('tap',function(e) {
+						var wid = $(e.target).closest('A').attr('data-waypoint-detail-id');
+						if (wid !== undefined)
+							initWaypointDetail(wid.toString());
+					});
+					
+					// ------------------
+					// Init App
+					// ------------------				
+					var deviceTimeout = 0;
+					setTimeout(function () {
+						console.log('LOOPING FOR DEVICE');
+						if(typeof navigator.device !== 'undefined' || deviceTimeout++ >= 2) {
+							onDeviceReady();
+						}
+						else {
+							setTimeout( arguments.callee, 1000 );
+						}
+					}, 1000);
+				});
+			}
+	    </script>
+	    
+	    <style type="text/css" media="screen">
+			.throbber {
+				margin:20px auto;
+				display:block;
+			}
+			
+			.tour-set-img-leader {
+				width:auto;
+				background:#aaa;
+				margin:0;
+			}
+			
+			.tour-set-leader {
+				box-sizing: border-box;
+			}
+			
+			.tour-times {
+				margin-top:0px;
+			}
+			
+			#tour-home .ui-content {
+				padding-top:0px;
+			}
+	    </style>
+  </head>
+  <body class="ui-mobile-viewport">
+  
+    <!-- Page One: Tour Set -->
+    <div data-role="page" id="tour-sets">         
+    	<div data-role="header" data-id="header" data-position="fixed" >             
+    		<h1>CapitalTour</h1>
+         	<a href="#tour-sets" class="ui-btn-right reload" data-rel="button"  data-icon="forward" onclick="hardReset()">Reload</a>
+    	</div>
+      <div data-role="content" id="tourset-landing">
+        <img class="throbber" style="display:none" src="images/ajax-loader2.gif" /></img>
+    
+        <div id="language-choice" style="display:none;">
+    	    <p><a href="#" data-role="button" data-language="English">English</a></p>
+    	    <p><a href="#" data-role="button" data-language="French">Fran&ccedil;ais</a></p>
+    	  </div>
+	  
+    	  <div id="tourset-list"></div>
+
+      </div>
+    	<div id="terms" style="display: none;"><a href="#" id="terms-link">Terms and Conditions</a></div>
+    </div> 
+
+    <!-- Page Two: Tour Home -->
+    <div data-role="page" id="tour-home">
+     <div data-role="header" data-id="header" data-position="fixed" >
+       <a href="#tour-sets" data-rel="button" data-direction="reverse" data-icon="arrow-l">Sets</a>
+       <h1>CapitalTour</h1>
+         	<a href="#tour-sets" class="ui-btn-right reload" data-rel="button"  data-icon="forward" onclick="hardReset()">Reload</a>
+     </div>
+     
+     <div class="tour-set-img-leader">
+       <div class="tour-set-main-img"></div>
+       <div class="tour-set-leader">
+         <h3 class="tour-set-title"></h3>
+         <div class="tour-set-main-img-precis" style="display:none"></div>
+       </div>
+     </div>
+     
+     <div data-role="content">
+       <!--
+       <div class="tour-times" data-role="fieldcontain" >
+ 				<fieldset id="tour-radio-buttons" data-role="controlgroup" data-type="horizontal" >
+ 					<input type="radio" name="radio-tourtime" class="radio-tourtime" id="radio-tourtime-30" value="1" checked="checked" />
+ 					<label for="radio-tourtime-30">30<small>min</small></label>
+ 					<input type="radio" name="radio-tourtime" class="radio-tourtime" id="radio-tourtime-60" value="2"  />
+ 					<label for="radio-tourtime-60">60<small>min</small></label>
+ 					<input type="radio" name="radio-tourtime" class="radio-tourtime" id="radio-tourtime-90" value="3"  />
+ 					<label for="radio-tourtime-90">90<small>min</small></label>
+ 					<input type="radio" name="radio-tourtime" class="radio-tourtime" id="radio-tourtime-all" value="4"  />
+ 					<label for="radio-tourtime-all">Show All</label>
+ 				</fieldset>
+ 		</div>
+ 		-->
+ 			<img class="throbber" src="images/ajax-loader2.gif"></img>
+ 			<ul id="tour-list" data-role="listview" data-divider-theme="b" data-inset="false"><li></li></ul>
+     </div>
+     <div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+   	  <div data-role="navbar">
+   		  <ul>
+   			  <li class="home"><a href="#tour-home" class="ui-btn-active ui-state-persist"  data-transition="none">Home</a></li>
+   			  <li><a href="#map?page=tour-home" data-transition="none">Map</a></li>
+   			  <li><a href="#me?page=tour-home" data-transition="none">Me</a></li>
+   		  </ul>
+   	  </div>
+     </div>
+    </div>
+
+	 <!-- Page Three: Tour -->
+    <div data-role="page" id="tour" >
+      <div data-role="header" data-id="header" data-position="fixed" >
+      	<a href="#tour-home" data-rel="button" data-direction="reverse" data-icon="arrow-l">Back</a>
+      	<h1>CapitalTour</h1>
+         	<a href="#tour-sets" class="ui-btn-right reload" data-rel="button"  data-icon="forward" onclick="hardReset()">Reload</a>
+      </div>
+        
+      <div data-role="content">
+  		  <div class="tour-map-leader">
+          <div class="tour-leader">
+            <div class="inner">
+              <h3 class="tour-title">Locating waypoints...</h3>
+              <div class="tour-body">Finding locations nearest to you.</div>
+            </div>
+          </div>
+          <div class="tour-main-img"><a href="#map?page=tour">&nbsp;</a></div>
+        </div>
+        <div class="tour-times" data-role="fieldcontain" >
+  				<fieldset id="tour-radio-buttons" data-role="controlgroup" data-type="horizontal" >
+  					<input type="radio" name="radio-tourtime-2" class="radio-tourtime" id="radio-tourtime-30-2" value="1" checked="checked" />
+  					<label for="radio-tourtime-30-2">30<small>min</small></label>
+  					<input type="radio" name="radio-tourtime-2" class="radio-tourtime" id="radio-tourtime-60-2" value="2"  />
+  					<label for="radio-tourtime-60-2">60<small>min</small></label>
+  					<input type="radio" name="radio-tourtime-2" class="radio-tourtime" id="radio-tourtime-90-2" value="3"  />
+  					<label for="radio-tourtime-90-2">90<small>min</small></label>
+  					<input type="radio" name="radio-tourtime-2" class="radio-tourtime" id="radio-tourtime-all-2" value="4"  />
+  					<label for="radio-tourtime-all-2">Show All</label>
+  				</fieldset>
+  			</div>
+  			<img class="throbber" src="images/ajax-loader2.gif"></img>
+  			<ul id="wp-list" data-role="listview" data-divider-theme="b" data-inset="false"></ul>
+      </div>
+      
+		  <div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+  			<div data-role="navbar">
+  				<ul>
+  					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+  					<li><a href="#map?page=tour" data-transition="none">Map</a></li>
+  					<li><a href="#me?page=tour" data-transition="none">Me</a></li>
+  				</ul>
+  			</div><!-- /navbar -->
+  		</div>
+    </div>
+
+	 <!-- Page Four: Waypoint -->
+     <div data-role="page" id="waypoint" >
+         <div data-role="header" data-id="header" data-position="fixed" >
+         	<a href="#tour" data-rel="button" data-direction="reverse" data-icon="arrow-l">Back</a>
+         	<h1>CapitalTour</h1>
+         	<a href="#" data-role="favourites-button" class="ui-btn-right btn-bookmark" data-icon="flag" data-iconpos="notext" data-iconshadow="false" >Bookmark</a>
+         	<a href="#tour-sets" class="ui-btn-right reload" data-rel="button"  data-icon="forward" onclick="hardReset()">Reload</a>
+         </div>
+         <div data-role="content">
+         	<div class="waypoint-img-leader">
+			<div class="media-bar">
+				<div data-role="controlgroup" data-type="horizontal" class="sharp-corners">
+					<a href="#photo-gallery" id="photo-galleryx" onclick="javascript:initGal('no'); return false;" data-role="button"><strong>Photos</strong></a>
+					<a href="#video" id="wpvideo" data-role="button"><strong>Video</strong></a>
+					<a href="#audio" id="wpaudio" data-role="button"><strong>Audio</strong></a>
+					<a id="wp-share" data-role="actionsheet"><strong>Share</strong></a>
+					<div>
+					    <a id="wp-share-fb" data-role="button" href="#">Post to Facebook</a>
+					    <a id="wp-share-tw" data-role="button" href="#">Post to Twitter</a>
+					    <br/>
+					    <!-- This close button is optional. The widget also closes if you click or touch outside of the popup -->
+					    <a data-role="button" data-rel="close" href="#">Cancel</a>
+					</div>
+				</div>
+			</div>
+			<div class="waypoint-main-img"></div>
+         	</div>
+         	<div class="waypoint-static-map"></div>
+         	<div class="waypoint-body">
+            	<h3 class="waypoint-title">Header</h3>
+	         	<div class="inner"></div>
+	         	<div class="body-footer"></div>
+	         	<a href="#" id="body-toggle" ><strong>Show more</strong></a>
+	         	<a href="#" id="next-waypoint" data-wp-id="" data-role="button">Next Waypoint</a>
+         	</div>
+			<ul id="wp-related" data-role="listview" data-inset="false" data-theme="a">
+         		<li>
+         			<a href="#">
+         				<h3>Related Tour Topics</h3>
+         			</a>
+         		</li>
+         		<li>
+         			<a href="#">
+         				<h3>Perspectives</h3>
+         			</a>
+         		</li>
+         	</ul>
+         </div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+					<li><a href="#map?page=waypoint" data-transition="none">Map</a></li>
+					<li><a href="#me?page=waypoint" data-transition="none">Me</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+     </div>
+
+	 <!-- Page: Waypoint Favourites -->
+     <div data-role="page" id="favourites">
+         <div data-role="header" data-id="header" data-position="fixed" >
+         	<a href="#me" data-rel="button" data-direction="reverse" data-icon="arrow-l">Back</a>
+         	<h1>CapitalTour</h1>
+         </div>
+         <div data-role="content"></div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+					<li><a href="#map?page=me" data-transition="none">Map</a></li>
+					<li><a href="#me?page=me" data-transition="none">Me</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+     </div>
+
+     <!-- Page: Perspectives -->
+     <div data-role="page" id="perspectives">
+         <div data-role="header" data-id="header" data-position="fixed">
+         	 <a href="#waypoint" data-rel="button" data-direction="reverse" data-icon="arrow-l">Back</a>
+             <h1>CapitalTour</h1>
+         	<a href="#tour-sets" class="ui-btn-right reload" data-rel="button"  data-icon="forward" onclick="hardReset()">Reload</a>
+		 </div>
+         <div data-role="content">
+         	<ul id="perspectives-list" data-role="listview" data-inset="false">
+         		<li>
+         			<a href="#">
+         				<h3>Loading...</h3>
+         			</a>
+         		</li>
+         	</ul>
+         </div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+					<li><a href="#map?page=perspectives" data-transition="none">Map</a></li>
+					<li><a href="#me?page=perspectives" data-transition="none">Me</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+     </div>
+
+     <!-- Page Five: Topics -->
+     <div data-role="page" id="topics">
+         <div data-role="header" data-id="header" data-position="fixed"  >
+         	<a href="#" data-role="topics-back-link" data-rel="button" data-direction="reverse" data-icon="arrow-l">Back</a>
+             <h1>CapitalTour</h1>
+         	<a href="#topic-filter" data-role="topics-filter-button" class="ui-btn-right" data-transition="slideup" >Filter</a>
+         </div>
+         <div data-role="content">
+         	<ul id="topic-list" data-role="listview" data-inset="false"></ui>
+         </div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+					<li><a href="#map?page=topics" data-transition="none">Map</a></li>
+					<li><a href="#me?page=topics" data-transition="none">Me</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+	</div>
+    
+	<!-- Page Six: Topic filter -->
+	<div data-role="page" id="topic-filter" >
+		<div data-role="header" data-id="header" data-position="fixed" >
+			<h1>CapitalTour</h1>
+			<a href="#topics" data-role="topics-filter-button" class="ui-btn-right ui-btn-active" data-transition="slideup" data-direction="reverse" >Filter</a>
+		</div>
+		<div data-role="content"></div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+					<li><a href="#map?page=topic-filter" data-transition="none">Map</a></li>
+					<li><a href="#me?page=topic-filter" data-transition="none">Me</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+	</div>
+
+	 <!-- Page Three: Tour -->
+     <div data-role="page" id="topdetail" data-add-back-btn="true" data-direction="reverse">
+         <div data-role="header" data-id="header" data-position="fixed">
+         	<h1>CapitalTour</h1>
+         </div>
+         <div data-role="content"></div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#tour-home" data-transition="none">Home</a></li>
+					<li><a href="#" data-role="topdet-map-link" data-transition="none">Map</a></li>
+					<li><a href="#" data-role="topdet-me-link" data-transition="none">Me</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+     </div>
+  
+	<!-- map -->
+	<div data-role="page" id="map">
+		<div data-role="header" data-id="header" data-position="fixed" class="ui-header  ui-header-fixed slidedown">    
+         	<a href="#" data-role="map-back-link" data-rel="button" data-direction="reverse" data-icon="arrow-l">Back</a>        
+			<h1>CapitalTour</h1>                       
+		</div> 
+		<div data-role="content" style="padding: 0px">
+			<div id="map_canvas" style="height: 420px; padding: 0px">
+				<img class="throbber" style="display:none" src="images/ajax-loader2.gif" />
+			</div>
+		</div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+					<li><a href="#map?page=map" data-role="map-button" class="ui-btn-active ui-state-persist"  data-transition="none">Map</a></li>
+					<li><a href="#me?page=map" data-transition="none">Me</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+	</div>
+	
+	<!-- me -->
+	<div data-role="page" id="me">   
+		<div data-role="header" data-id="header" data-position="fixed" >
+			<a href="#" data-role="pages-back-link" data-rel="button" data-direction="reverse" data-icon="arrow-l">Back</a> 
+			<h1>CapitalTour</h1>                       
+		</div>         
+		<div data-role="content"></div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+					<li><a href="#map?page=me" data-transition="none">Map</a></li>
+					<li><a href="#me?page=me" class="ui-btn-active ui-state-persist" data-transition="none">Me</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+	</div>
+
+	<!-- Page: Pages Content -->
+    <div data-role="page" id="static-pages">
+        <div data-role="header" data-id="header" data-position="fixed" >
+        	<a href="#me" data-role="static-pages-back-link" data-rel="button" data-direction="reverse" data-icon="arrow-l">Back</a>
+        	<h1>CapitalTour</h1>
+        </div>
+        <div data-role="content"></div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+					<li><a href="#map?page=me" data-transition="none">Map</a></li>
+					<li><a href="#me?page=me" data-transition="none">Me</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+    </div>
+	
+	<!-- settings -->
+	<div data-role="page" id="settings">        
+		<div data-role="header" data-id="header" data-position="fixed" > 
+			<a href="#tour-sets" data-rel="button" data-direction="reverse" data-icon="arrow-l">Back</a>
+			<h1>CapitalTour</h1>                       
+		</div>         
+		<div data-role="content">
+			<fieldset class="language-switch" data-role="controlgroup" data-type="horizontal" >
+	         	<input type="radio" name="lang-select" id="lang-select-en" value="en" checked="checked"><label for="lang-select-en"  >En</label>
+	         	<input type="radio" name="lang-select" id="lang-select-fr" value="fr"><label for="lang-select-fr" >Fr</label>
+		    </fieldset>
+		    <label for="ua-switch">Accessible map</label>
+			<select name="ua-switch" id="ua-switch" data-role="slider">
+				<option value="off">Off</option>
+				<option value="on">On</option>
+			</select>
+			<br /><br />
+		    <label for="geo-switch">Geolocation</label>
+			<select name="geo-switch" id="geo-switch" data-role="slider">
+				<option value="off">Off</option>
+				<option value="on">On</option>
+			</select>			
+		</div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+					<li><a href="#map?page=settings" data-transition="none">Map</a></li>
+					<li><a href="#me?page=settings" class="ui-btn-active ui-state-persist" data-transition="none">Me</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+	</div>
+	
+	<!-- about -->
+	<div data-role="page" id="about"  >         
+		<div data-role="header" data-id="header" data-position="fixed" class="ui-header ui-header-fixed slidedown">             
+			<h1>CapitalTour</h1>                       
+		</div>         
+		<div data-role="content">
+			<h1>All about the app</h1>
+		</div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#home" data-direction="reverse">Home</a></li>
+					<li><a href="#map?page=settings" >Map</a></li>
+					<li><a href="#me?page=about" data-transition="none">Me</a></li>
+					<li><a href="#about" class="ui-btn-active ui-state-persist">About</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+	</div>
+	
+	<!-- Page: Photo Gallery	 -->
+	<div data-role="page" id="photo-gallery" class="gallery-page ui-page-footer-fullscreen">
+		<div data-role="header">
+			<a href="#waypoint" data-rel="button" data-direction="reverse" data-icon="arrow-l">Back</a>
+			<h1>CapitalTour</h1>
+		</div>
+		<div data-role="content">
+			<ul class="gallery">
+				<li><a href="photos/full/001.jpg" rel="external"><img src="photos/thumb/001.jpg" alt="Image 001" /></a></li>
+				<li><a href="photos/full/002.jpg" rel="external"><img src="photos/thumb/002.jpg" alt="Image 002" /></a></li>
+				<li><a href="photos/full/003.jpg" rel="external"><img src="photos/thumb/003.jpg" alt="Image 003" /></a></li>
+				<li><a href="photos/full/004.jpg" rel="external"><img src="photos/thumb/004.jpg" alt="Image 004" /></a></li>
+				<li><a href="photos/full/005.jpg" rel="external"><img src="photos/thumb/005.jpg" alt="Image 005" /></a></li>
+				<li><a href="photos/full/006.jpg" rel="external"><img src="photos/thumb/006.jpg" alt="Image 006" /></a></li>
+				<li><a href="photos/full/007.jpg" rel="external"><img src="photos/thumb/007.jpg" alt="Image 007" /></a></li>
+				<li><a href="photos/full/008.jpg" rel="external"><img src="photos/thumb/008.jpg" alt="Image 008" /></a></li>
+				<li><a href="photos/full/009.jpg" rel="external"><img src="photos/thumb/009.jpg" alt="Image 009" /></a></li>
+			</ul>
+		</div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+					<li><a href="#map?page=photo-gallery" data-transition="none">Map</a></li>
+					<li><a href="#me?page=photo-gallery" data-transition="none">Me</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+	</div>
+
+	<!-- Page: Audio -->
+    <div data-role="page" id="audio">
+        <div data-role="header" data-id="header" data-position="fixed">
+        	<a href="#waypoint" data-rel="button" data-direction="reverse" data-icon="arrow-l">Back</a>
+        	<h1>CapitalTour</h1>
+        </div>
+        <div data-role="content"></div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+					<li><a href="#map?page=audio" data-transition="none">Map</a></li>
+					<li><a href="#me?page=audio" data-transition="none">Me</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+    </div>
+
+	<!-- Page: Video -->
+    <div data-role="page" id="video">
+        <div data-role="header" data-id="header" data-position="fixed" >
+        	<a href="#waypoint" data-rel="button" data-direction="reverse" data-icon="arrow-l">Back</a>
+        	<h1>CapitalTour</h1>
+        </div>
+        <div data-role="content"></div>
+		<div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+			<div data-role="navbar">
+				<ul>
+					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+					<li><a href="#map?page=video" data-transition="none">Map</a></li>
+					<li><a href="#me?page=video" data-transition="none">Me</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+    </div>
+
+	<!-- Page: Video Player -->
+    <div data-role="page" id="video-player">
+        <div data-role="content" id="video-player-content"></div>
+    </div>
+
+	<!-- Page: Audio Player -->
+    <div data-role="page" id="audio-player">
+        <div data-role="content" id="audio-player-content"></div>
+    </div>
+	
+	<!-- definition dialogue	 -->
+	<div data-role="dialog" id="definition" data-url="definition"  tabindex="0"  role="dialog" data-theme="e"><!-- dialog-->
+		<div data-role="header" role="banner">
+			<h1 class="ui-title" tabindex="0" role="heading" aria-level="1">Tour</h1>
+		</div><!-- /header -->
+
+		<div data-role="content"   role="main">
+			<div class="body"></div>
+			<a href="#waypoint" class="dialog-close" data-role="button"  >Close</a>   
+		</div>
+	</div>
+
+	<!-- Page: Fun Facts -->
+    <div data-role="page" id="fun-facts" >
+      <div data-role="header" data-id="header" data-position="fixed" >
+    <a href="#waypoint" data-rel="button" data-direction="reverse" data-icon="arrow-l">Back</a>
+      	<h1>CapitalTour</h1>
+      </div>
+      <div data-role="content">
+      	<h3 class="fun-facts-title">Header</h3>         
+         	<span id="fun-facts-body"></span>
+      </div>
+		  <div data-role="footer" data-id="footer" data-position="fixed" data-theme="f">
+  			<div data-role="navbar">
+  				<ul>
+  					<li class="home"><a href="#tour-home"  data-transition="none">Home</a></li>
+  					<li><a href="#map?page=fun-facts" data-transition="none">Map</a></li>
+  					<li><a href="#me?page=fun-facts" data-transition="none">Me</a></li>
+  				</ul>
+  			</div><!-- /navbar -->
+  		</div>
+    </div>
+    
+    <div id="preloaded-images">
+       <img src="css/images/time-bar-on.png" width="1" height="1" alt="" />
+       <img src="css/images/ui.png" width="1" height="1" alt="" />
+       <img id="ttmp" src="css/images/ui.png" width="1" height="1" alt="" />       
+    </div>
+    
+  </body>
+</html>

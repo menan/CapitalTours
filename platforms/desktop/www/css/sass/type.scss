@@ -1,0 +1,57 @@
+$h0: 26px;
+$h1 : 23px;
+$h2: 18px;
+
+$title-byline: 13px;
+$title-byline-smaller: 12px;
+
+body {
+	font-size: 15px;
+}
+
+h1, h2, h3 {
+	text-shadow: 0 1px 0 rgba(3,55,72,0.24);;
+}
+
+p {
+	text-shadow: none;
+}
+
+a {
+	font-weight: bold;
+	text-decoration: none;
+	color: #00a1af;
+}
+
+.waypoint-body a:active, .waypoint-body a:hover {
+	color: #000;
+}
+
+h3.tour-set-title {
+	
+}
+
+.ui-listview {
+
+	li h3 {
+		font-size: 20px;
+	}
+	
+	.ui-li-desc {
+		overflow: visible;
+		white-space: normal;
+	}
+}
+
+@mixin content-title {
+	margin-bottom: .1em;
+	border-bottom: 1px solid #e5e5e3;
+	font-size: $h0;
+	line-height: 1;
+	color: $txt-passive-color;
+}
+
+@mixin alt-page-title {
+	@include content-title;
+	margin: .5em 0 .5em;
+}
