@@ -1,0 +1,330 @@
+@import 'constants';
+@import 'type';
+
+/* @group footer nav */
+
+[data-role="footer"] {
+	height: 48px;
+	border: 2px solid #b9b9b7;
+	border-width: 1px 0 0 0;
+	box-shadow: inset 0 3px 4px rgba(0,0,0,0.2);
+	
+	.ui-btn {
+		height: 48px;
+		border: 0;
+		box-shadow: inset 0 3px 4px rgba(0,0,0,0.3), inset -1px 0 3px rgba(255,255,255,0.05), inset 1px 0 3px rgba(255,255,255,0.05);
+		border-right: 1px solid #4c4c46 !important;
+	}
+}
+
+/* @end */
+
+[data-role="listview"] {
+	li {
+	
+		.ui-icon-arrow-r {
+			background: url('images/ui.png') no-repeat -147px -4px;
+			width: 24px;
+			height: 24px;
+		}
+		
+		a.ui-link-inherit {
+			padding-right: 40px !important;
+		}
+		
+		&.ui-li-has-count a.ui-link-inherit {
+			padding-right: 70px !important;
+		}
+	
+		p {
+			font-size: $title-byline-smaller;
+			color: $txt-passive-color;
+		}
+		
+		&.ui-btn-active {
+			background: $ui-em-color;
+		}
+		
+		&.ui-li-has-count .ui-li-count {
+			right: 55px;
+		}
+	}
+}
+
+#tourset-list .ui-icon-arrow-r {
+	display: block;
+	background: url('images/ui.png') no-repeat -147px -4px;
+	width: 24px;
+	height: 24px;
+	position: relative;
+	top: 13px;
+	right: 0;
+	float: right;
+	z-index: 100;
+}
+
+@mixin media-arrow {
+	position: absolute;
+	z-index: 10;
+	right: 22px;
+	background: url('images/ui.png') no-repeat -329px -150px;
+}
+
+@mixin media-arrow-pause {
+	background-position: -383px -150px;
+}
+
+
+.ui-li-has-thumb .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li-has-thumb {
+	padding-left: 80px;
+}
+
+@mixin li-img-left {
+	margin-top: 0;
+
+	li.ui-li-has-thumb {
+	
+		.ui-btn-inner {
+			@include background-image-retina('images/li-bg', 'png', 12px, 136px);
+			background-position: 1px -33px;
+			background-repeat: no-repeat;
+		}
+		
+		img {
+			width: 47px;
+			margin: 9px 0 0 20px;
+		}
+		
+		h3 {
+			margin: .6em 0 .4em;
+			font-size: 16px;
+		}
+		
+		a.ui-link-inherit {
+			padding-top:  .3em;
+			padding-bottom:  .3em;
+		}
+		
+		p {
+			color: $txt-passive-color;
+			font-size: 9px;
+		}
+	}
+}
+
+@mixin li-img-right {
+	margin-top: 0;
+	
+		li {
+		
+			.ui-btn-inner {
+				
+			}
+			
+			img.ui-li-thumb {
+				float: right;
+				left: auto;
+				right: 13px;
+				width: 47px;
+				margin: 12px 0 0 0;
+			}
+
+			video {
+				float: right;
+				left: auto;
+				right: 0;
+				width: 47px;
+				margin: -49px -25px 0 0;
+			}
+			
+			h3 {
+				margin: 1em 0 .8em;
+				font-size: 12px;
+				overflow: visible;
+				white-space: normal;
+			}
+			
+			a.ui-link-inherit {
+				padding-top:  0;
+				padding-bottom:  .3em;
+				padding-left: 15px;
+				padding-right: 60px !important;
+			}
+			
+			p {
+				color: $txt-passive-color;
+				font-size: 10px;
+				line-height: 1.2;
+			}
+		}
+}
+
+@mixin li-img-right-taller {
+	@include li-img-right;
+	
+	li a.ui-link-inherit {
+		padding: .7em 75px .7em 15px !important;
+	}
+	
+	li video {
+		margin-right: -60px;
+	}
+}
+
+@mixin radio-on {
+	&.ui-radio-on {
+			/*background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#06a2af), color-stop(49.5%,#6dcfd8), color-stop(50%,#67c7cf), color-stop(100%,#07a3b1));*/
+			background: url('images/time-bar-on.png') repeat-x !important;
+			
+			.ui-btn-inner {
+				height: 30px;
+				overflow: hidden;
+				background: url('images/time-bar-arrow.png') bottom center no-repeat;
+			}
+			
+			.ui-btn-text {
+				color: #fff;
+				
+			}
+		}
+}
+
+
+.tour-times {
+	position: relative;
+	z-index: 20;
+	margin: $no-side-inset;
+	margin-top: 15px;
+	width: auto;
+	height: 48px;
+	padding: 0;
+	box-shadow: 0 1px 2px 1px rgba(0,0,0,0.08);
+	background: $ui-em-color;
+	/*background: #bfd2d6;*/
+	
+	.ui-radio {
+		display: inline-block;
+		width: 22%;
+	}
+	
+	.ui-radio:last-child {
+		width: 34%;
+		float: right;
+	}
+
+	.ui-corner-all, .ui-corner-left, .ui-corner-right {
+		border-radius: 0;
+		-webkit-border-radius: 0;
+	}
+	
+	.ui-btn {
+		border: 0;
+	}
+	
+	label {
+		display: block;
+		width: 100%;
+		background: $ui-em-color;
+		
+		&:active, &:hover {
+			background: $ui-hover-color !important;
+		}
+		
+		.ui-btn-inner {
+			padding: 12px 15px;
+			
+			.ui-btn-text {
+				font-size: 19px;
+				color: #719199;
+				
+				small {
+					font-size: 11px;
+					font-weight: normal;
+				}
+			}
+		}
+		
+		&:active .ui-btn-text, &:hover .ui-btn-text {
+			color: #fff;
+			text-shadow:  none;
+		}
+		
+		@include radio-on;
+	}
+	
+	.ui-radio:last-child label {
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%,#d9ebed), color-stop(100%,#bfd2d6)); 
+		background: linear-gradient(left, #d9ebed 0%,#bfd2d6 100%);
+		@include radio-on;
+		
+		.ui-btn-inner {
+			padding-top: 13px;
+			padding-bottom: 13px;
+			
+			.ui-btn-text {
+				font-size: 17px;
+			}
+		}
+		
+		&.ui-radio-on .ui-btn-inner {
+			padding-bottom: 11px;
+		}
+	}
+	
+	.ui-radio:first-child label {
+		background: -webkit-gradient(linear, right top,left top,  color-stop(0%,#d9ebed), color-stop(100%,#bfd2d6)); 
+		background: linear-gradient(ri, #d9ebed 0%,#bfd2d6 100%);
+		@include radio-on;
+	}
+}
+
+.fr .tour-times .ui-radio:last-child label .ui-btn-inner .ui-btn-text {
+	font-size: 11px;
+}
+
+#tour .tour-times {
+	margin-top: 10px;
+}
+
+.ui-li-divider {
+	padding-top: $thin-divider;
+	padding-bottom: $thin-divider;
+	border: none;
+}
+
+.ui-actionsheet-content {
+	width: 280px;
+	background: #f9f9f9;
+	border: none;
+	
+	.ui-btn {
+		background: $ui-em-color;
+		box-shadow: 0px 1px 4px  rgba(0, 0, 0, .2) ;
+	}
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) {
+
+	[data-role="listview"] li .ui-icon-arrow-r, #tourset-list .ui-icon-arrow-r
+	 {
+		background-image: url('images/ui-2x.png') !important;
+		background-size: 500px 500px !important;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,50 @@
+$radio-padding: 15px;
+$control-padding: 8px;
+
+$sharp-corners: 0;
+
+$img-no-inset: -15px;
+$regular-inset: 15px;
+$no-side-inset: 0 -15px;
+@mixin no-data-inset {
+	margin: -15px;
+	padding: 15px;
+}
+
+$header-height: 47px;
+$footer-height: 3em;
+
+$thin-divider: 3px;
+
+/*  light teal */
+$header-color: #d9ebed;
+$ui-em-color: #d9ebed;
+$ui-hover-color: #b8ced0;
+
+$ui-alt-color: #719199;
+
+$ui-important-color: #bfcb23;	/* green */
+
+$ui-active-color: #00a1ac;		/* teal */
+$txt-passive-color: #54544b;	/* grey */
+$aux-nav-color: #54544b;
+$header-link-color: #033748;	/*  blue  */	
+
+
+@mixin img-frame {
+	border: 3px solid white;
+	-webkit-box-shadow: 0 0 4px 1px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0 0 4px 1px rgba(0,0,0,0.1);
+	box-shadow: 0 0 4px 1px rgba(0,0,0,0.1);
+}
+
+@mixin background-image-retina($file, $type, $width, $height) {
+  background-image: url($file + '.' + $type);
+
+  @media (-webkit-min-device-pixel-ratio: 2) {
+    & {
+      background-image: url($file + '-2x.' + $type);
+      -webkit-background-size: $width $height;
+    }
+  }
+}

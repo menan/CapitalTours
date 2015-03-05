@@ -1,0 +1,16 @@
+.ui-page {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+#definition [data-role=header] a {
+  display: none !important;
+}
+
+.tour-set-img-leader .tour-set-leader {
+  width: auto;
+}
+
+[data-role="header"] .ui-btn.ui-btn-right .ui-btn-inner {
+  width: 30px;
+}
