@@ -263,7 +263,8 @@ a {
 [data-role=header] .ui-title {
   margin-top: .4em;
   margin-bottom: .4em;
-  margin-left: 35%;
+  margin-right: 10px;
+  margin-left: auto;
   background: url("images/ui.png") no-repeat 0 6px;
   width: 103px;
   height: 38px;
