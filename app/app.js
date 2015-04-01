@@ -456,12 +456,12 @@ var fsGallery = {
 
 // set tour times
 var currentWeight = {
-   	weight: 1,
+   	weight: 4,
 	get: function() {
-        return this.weight;
+        return 4;
     },
 	set: function(w) {
-        this.weight = w;
+        this.weight = 4;
     }
 };
 
