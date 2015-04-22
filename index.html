@@ -101,7 +101,7 @@
 						var language = $(e.target).closest("A").attr('data-language');
 						$("#language-choice").hide();
 						$("#tour-sets .throbber").css('display', 'block')
-						playTutorial(language);
+						// playTutorial(language);
 						cacheData(language, function(){
 							showTourSets();
 							return false;
