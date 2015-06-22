@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns   = "http://www.w3.org/ns/widgets"
+        xmlns:gap   = "http://phonegap.com/ns/1.0"
+        id          = "ca.gc.canadascapital.canadaday"
+        versionCode = "11" 
+        version     = "1.1.1" >
+
+    <!-- versionCode is optional and Android only -->
+
+    <name>Capital Tours - Tour capitale</name>
+
+    <description>
+        
+    </description>
+
+    <gap:splash src="photos/splash-ldpi.png" gap:platform="android" gap:qualifier="ldpi" />
+    <gap:splash src="photos/splash-mdpi.png" gap:platform="android" gap:qualifier="mdpi" />
+    <gap:splash src="photos/splash-hdpi.png" gap:platform="android" gap:qualifier="hdpi" />
+
+    <!-- iPhone and iPod touch -->
+    <gap:splash src="photos/Default.png" gap:platform="ios" width="320" height="480" />
+    <gap:splash src="photos/Default@2x.png" gap:platform="ios" width="640" height="960" />
+
+
+    <author href="http://pch.gc.ca" email="social.media@pch.gc.ca">
+        Canadian Heritage - Patrimoine canadien
+    </author>
+
+</widget>
