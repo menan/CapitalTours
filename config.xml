@@ -9,19 +9,19 @@
 
     <name>Capital Tours - Tour capitale</name>
 
-    <description>
-        
-    </description>
+    <description> </description>
 
-    <gap:splash src="photos/splash-ldpi.png" gap:platform="android" gap:qualifier="ldpi" />
-    <gap:splash src="photos/splash-mdpi.png" gap:platform="android" gap:qualifier="mdpi" />
-    <gap:splash src="photos/splash-hdpi.png" gap:platform="android" gap:qualifier="hdpi" />
-    <gap:splash src="photos/splash-xhdpi.png" gap:platform="android" gap:qualifier="xhdpi" />
-    <gap:splash src="photos/splash-xxhdpi.png" gap:platform="android" gap:qualifier="xxhdpi" />
+    <gap:splash src="/photos/Default.png" />
+
+    <gap:splash src="/photos/splash-ldpi.png" gap:platform="android" gap:qualifier="ldpi" />
+    <gap:splash src="/photos/splash-mdpi.png" gap:platform="android" gap:qualifier="mdpi" />
+    <gap:splash src="/photos/splash-hdpi.png" gap:platform="android" gap:qualifier="hdpi" />
+    <gap:splash src="/photos/splash-xhdpi.png" gap:platform="android" gap:qualifier="xhdpi" />
+    <gap:splash src="/photos/splash-xxhdpi.png" gap:platform="android" gap:qualifier="xxhdpi" />
 
     <!-- iPhone and iPod touch -->
-    <gap:splash src="photos/Default.png" gap:platform="ios" width="320" height="480" />
-    <gap:splash src="photos/Default@2x.png" gap:platform="ios" width="640" height="960" />
+    <gap:splash src="/photos/Default.png" gap:platform="ios" width="320" height="480" />
+    <gap:splash src="/photos/Default@2x.png" gap:platform="ios" width="640" height="960" />
 
 
     <author href="http://pch.gc.ca" email="social.media@pch.gc.ca">
