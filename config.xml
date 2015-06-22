@@ -24,6 +24,16 @@
     <gap:splash src="/photos/Default@2x.png" gap:platform="ios" width="640" height="960" />
 
 
+    <icon src="/photos/Icon@2x.png" />
+
+
+    <icon src="/photos/icon-ldpi.png" gap:platform="android" gap:density="ldpi" />
+    <icon src="/photos/icon-mdpi.png" gap:platform="android" gap:density="mdpi" />
+    <icon src="/photos/icon-hdpi.png" gap:platform="android" gap:density="hdpi" />
+    <icon src="/photos/icon-xhdpi.png" gap:platform="android" gap:density="xhdpi" />
+    <icon src="/photos/icon-xxhdpi.png" gap:platform="android" gap:density="xxhdpi" />
+
+
     <author href="http://pch.gc.ca" email="social.media@pch.gc.ca">
         Canadian Heritage - Patrimoine canadien
     </author>
