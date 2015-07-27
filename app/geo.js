@@ -180,7 +180,7 @@ function onSuccess(position) {
 // getCurrentPosition onError Callback receives a PositionError object
 function onError(error) {
 	//console.log('GEO Error: ' + error.message);
-	alert("you location could not be obtained");
+	// alert("you location could not be obtained");
 	// if(error.code == "1" || error.code == "2" || !isConnected()) {
 		store.settings.save({key: "systemgeo", value: "disabled"});
 		geo.set("off");
