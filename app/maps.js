@@ -68,7 +68,7 @@ function initMap() {
 			
 			var latLngSplit = getGeoAverage(coords).split(',');
 			latLng = new google.maps.LatLng(latLngSplit[0], latLngSplit[1]);		
-			//console.log(latLngSplit + " " + where);
+			console.log(latLngSplit + " " + where);
 		}
 	});
 	
